@@ -74,6 +74,7 @@ other_data = numpy.array([[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0
 #Function which finds the quality value for each pixel to produce a matrix N-1xN-1
 def quality_map(list):
     imrange = len(list)
+    quality_map = numpy.empty([imrange-2,imrange-2],dtype = float)
     for x in range(1,(imrange-1)):
         for y in range(1,(imrange-1)):
             xsum = 0
@@ -100,14 +101,13 @@ def quality_map(list):
                 ydiff = ydiff + ydiff0 + ydiff2
                 z += 1
             quality_value = (sqrt(xdiff)+sqrt(ydiff))/9.
-            print(quality_value)
-#quality_map[x-1][y-1] = quality_value
-#return quality_map
+            quality_map[x-1][y-1] = quality_value
+    return quality_map
 
-
-quality_map(simple_data)
-quality_map(other_data)
-quality_map(data_img_decoded)
+quality_map_array = quality_map(simple_data)
+print(quality_map_array)
+#quality_map(other_data)
+#quality_map(data_img_decoded)
 
 
 
