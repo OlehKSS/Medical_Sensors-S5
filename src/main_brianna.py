@@ -1,9 +1,7 @@
-import os, sys
-import numpy
-import struct
+import os, sys, numpy, struct, random
 from matplotlib import pylab, pyplot, cm
 from math import sqrt
-import random
+from quality_map_functions import quality_map_first_order, quality_map_second_order
 
 
 #Binary Files info
@@ -62,52 +60,21 @@ data_img_decoded = numpy.array(data_img_decoded) + 0.
 #pyplot.imshow(data_img_decoded, cmap = cm.Greys_r)
 #pyplot.show()
 
-#Use image data stored in data_img_decoded to create a quality map
 
 #Create a simple 9x9 image to work with
 N = 9
 simple_data = [[random.randrange(0,4096) for i in range(N)] for j in range(N)]
 other_data = numpy.array([[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]) +0.
-#pyplot.imshow(simple_data, cmap = cm.Greys_r)
-#pyplot.show()
 
-#Function which finds the quality value for each pixel to produce a matrix N-1xN-1
-def quality_map(list):
-    imrange = len(list)
-    quality_map = numpy.empty([imrange-2,imrange-2],dtype = float)
-    for x in range(1,(imrange-1)):
-        for y in range(1,(imrange-1)):
-            xsum = 0
-            ysum = 0
-            xdiff = 0
-            ydiff = 0
-            #Compute the partial derivatives in the x and y directions
-            for z in range(-1,2):
-                xsum0 = list[y-1][x+z] - list[y][x]
-                xsum2 = list[y+1][x+z] - list[y][x]
-                ysum0 = list[y+z][x-1] - list[y][x]
-                ysum2 = list[y+z][x+1] - list[y][x]
-                xsum = xsum + xsum0 + xsum2
-                ysum = ysum + ysum0 + ysum2
-                z += 1
-            xmean = xsum/6.
-            ymean = ysum/6.
-            for z in range(-1,2):
-                xdiff0 = (list[y-1][x+z] - xmean)**2.
-                xdiff2 = (list[y+1][x+z] - xmean)**2.
-                xdiff = xdiff + xdiff0 + xdiff2
-                ydiff0 = (list[y+z][x-1] - ymean)**2.
-                ydiff2 = (list[y+z][x+1] - ymean)**2.
-                ydiff = ydiff + ydiff0 + ydiff2
-                z += 1
-            quality_value = (sqrt(xdiff)+sqrt(ydiff))/9.
-            quality_map[x-1][y-1] = quality_value
-    return quality_map
+#Find the quality map for the image using the module quality_map_functions
+#quality_map_array = quality_map_first_order(simple_data)
+#print(quality_map_array)
 
-quality_map_array = quality_map(simple_data)
+quality_map_array = quality_map_first_order(simple_data)
 print(quality_map_array)
-#quality_map(other_data)
-#quality_map(data_img_decoded)
+
+quality_map_array1 = quality_map_second_order(simple_data)
+print(quality_map_array1)
 
 
 
