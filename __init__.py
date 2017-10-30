@@ -1,7 +1,7 @@
 import os, sys
 import numpy
-import struct
 from matplotlib import pylab, pyplot, cm
+from _shared.phase_image import PhaseImage
 
 
 #Binary Files info
@@ -10,7 +10,7 @@ from matplotlib import pylab, pyplot, cm
 #LitleEndian
 #header to skip 512 bytes
 
-path = "../data"
+path = "./data"
 fileExt = [".sur"]
 filePaths = []
 fileNames = []
@@ -31,24 +31,8 @@ for index, fileName in enumerate(fileNames):
 
 fileNo = int(input())
 
-#reading binary file
-with open(filePaths[fileNo], 'rb') as binaryFile:
-    #skip header and read
-    header_size = 512
-    data_header = binaryFile.read(header_size) 
-    #utf-8 and ascii decoding fails bytes(data_header).decode('utf-8')
-
-    data_img_decoded = []
-
-    for i in range(255):
-        temp = []
-
-        for i in struct.iter_unpack('<H', bytes(binaryFile.read(512))):
-            temp.append(*i)
-        
-        data_img_decoded.append(temp)
-
-    pyplot.imshow(data_img_decoded, cmap = cm.Greys_r)
-    pyplot.show()   
-
-    
+#reading binary file and showing it
+phase_img = PhaseImage(256, 256, path = filePaths[fileNo])
+pyplot.imshow(phase_img.read(), cmap = cm.Greys_r)
+pyplot.show()   
+  
