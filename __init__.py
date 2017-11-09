@@ -1,8 +1,8 @@
 import os, sys
 import numpy
-import struct
 from matplotlib import pylab, pyplot, cm
-
+from _shared.phase_image import PhaseImage
+from region_growing_linear_est.quality_maps import quality_map_first_order, quality_map_second_order
 
 #Binary Files info
 #16b unsigned int
@@ -10,7 +10,7 @@ from matplotlib import pylab, pyplot, cm
 #LitleEndian
 #header to skip 512 bytes
 
-path = "../data"
+path = "./data"
 fileExt = [".sur"]
 filePaths = []
 fileNames = []
@@ -32,23 +32,14 @@ for index, fileName in enumerate(fileNames):
 fileNo = int(input())
 
 #reading binary file
-with open(filePaths[fileNo], 'rb') as binaryFile:
-    #skip header and read
-    header_size = 512
-    data_header = binaryFile.read(header_size) 
-    #utf-8 and ascii decoding fails bytes(data_header).decode('utf-8')
+phase_img = PhaseImage(256, 256, path = filePaths[fileNo])
+data = phase_img.read()
+#pyplot.imshow(data, cmap = cm.Greys_r)
+#pyplot.show()  
 
-    data_img_decoded = []
+#calculate quality maps
 
-    for i in range(255):
-        temp = []
+qm1 = quality_map_first_order(data)
 
-        for i in struct.iter_unpack('<H', bytes(binaryFile.read(512))):
-            temp.append(*i)
-        
-        data_img_decoded.append(temp)
-
-    pyplot.imshow(data_img_decoded, cmap = cm.Greys_r)
-    pyplot.show()   
-
-    
+qm2 = quality_map_second_order(data)
+  

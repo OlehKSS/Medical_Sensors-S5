@@ -1,10 +1,10 @@
 import numpy
 from math import sqrt
 
-#Use image data stored in data_img_decoded to create a quality map
+'''Use image data stored in data_img_decoded to create a quality map'''
 
-#Function which finds the first order quality value for each pixel to produce a matrix N-1xN-1
 def quality_map_first_order(list):
+    '''Function which finds the first order quality value for each pixel to produce a matrix N-1xN-1'''
     #Define a black border around the edge of the list for the quality map
     list = numpy.pad(list, 1, 'constant', constant_values=0)
     imrange = len(list)
@@ -35,6 +35,7 @@ def quality_map_first_order(list):
     return quality_map
 
 def quality_map_second_order(list):
+    '''Function which finds the second order quality value for each pixel to produce a matrix N-1xN-1'''
     #Define a black border around the edge of the list for the quality map
     list = numpy.pad(list, 1, 'constant', constant_values=0)
     imrange = len(list)
