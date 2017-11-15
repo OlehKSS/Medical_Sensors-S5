@@ -2,7 +2,7 @@ import os, sys
 import numpy
 from matplotlib import pylab, pyplot, cm
 from _shared.phase_image import PhaseImage
-from region_growing_linear_est.quality_maps import quality_map_first_order, quality_map_second_order
+from region_growing_linear_est.quality_maps import quality_map_second_order
 
 #Binary Files info
 #16b unsigned int
@@ -34,12 +34,13 @@ fileNo = int(input())
 #reading binary file
 phase_img = PhaseImage(256, 256, path = filePaths[fileNo])
 data = phase_img.read()
-#pyplot.imshow(data, cmap = cm.Greys_r)
-#pyplot.show()  
+pyplot.imshow(data, cmap = cm.Greys_r)
+pyplot.show()
 
 #calculate quality maps
 
-qm1 = quality_map_first_order(data)
+#qm1 = quality_map_first_order(data)
 
 qm2 = quality_map_second_order(data)
-  
+pyplot.imshow(qm2, cmap = cm.Greys_r)
+pyplot.show()
