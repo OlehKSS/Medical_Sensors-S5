@@ -37,10 +37,10 @@ data = phase_img.read()
 pyplot.imshow(data, cmap = cm.Greys_r)
 pyplot.show()
 
+print(numpy.amax(data))
+print(numpy.amin(data))
+
 #calculate quality maps
-
-#qm1 = quality_map_first_order(data)
-
-qm2 = quality_map_second_order(data)
-pyplot.imshow(qm2, cmap = cm.Greys_r)
-pyplot.show()
+#qm2 = quality_map_second_order(data)
+#pyplot.imshow(qm2, cmap = cm.Greys_r)
+#pyplot.show()
