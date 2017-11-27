@@ -37,6 +37,7 @@ data = phase_img.read()
 pyplot.imshow(data, cmap = cm.Greys_r)
 pyplot.show()
 
+
 print(numpy.amax(data))
 print(numpy.amin(data))
 

@@ -43,11 +43,15 @@ bullseye = uint8(bullseye);
 
 %Save the images in the same folder they originally came from
 %in the 16 bit unsigned format (for wrapped) and 8 bit (for
-%original)
+%original images as they will be used for the report)
 swirls_wrapped = uint16(swirls_wrapped);
 bullseye_wrapped = uint16(bullseye_wrapped);
 
-imwrite(swirls, 'swirls.jpg');
-imwrite(swirls_wrapped, 'swirls_wrapped.jpg','BitDepth',12);
-imwrite(bullseye, 'bullseye.jpg');
-imwrite(bullseye_wrapped, 'bullseye_wrapped.jpg','BitDepth',12);
+fid = fopen('swirls_wrapped.raw' '+ w');
+cnt = fwrite(fid, swirls_wrapped 'uint16');
+fclose (fid);
+
+%imwrite(swirls, 'swirls.jpg');
+%imwrite(swirls_wrapped, 'swirls_wrapped.jpg','BitDepth',12);
+%imwrite(bullseye, 'bullseye.jpg');
+%imwrite(bullseye_wrapped, 'bullseye_wrapped.jpg','BitDepth',12);
