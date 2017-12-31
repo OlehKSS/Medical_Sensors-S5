@@ -46,23 +46,19 @@ def phase_derivative_variance(list):
 
 
 
-def threshold(image):
+def threshold(phase_derivative_map):
     '''Function which creates a binary image from the phase derivative map NxN'''
     
     #Apply otsu threshold to the image
-    thresh = filters.threshold_otsu(image)
-    thresholded_image = image > thresh
+    thresh = filters.threshold_otsu(phase_derivative_map)
+    thresholded_image = phase_derivative_map > thresh
 
     return thresholded_image
-
-def group_image(image):
-    onesgroup = image > 0
-    zerosgroup = image < 1
-    return(onesgroup,zerosgroup)
 
 def find_polarity_arrays(thresholded_image, residue_map):
     '''Function which gives 4 arrays of polarity (row-major order) for regions 0 and 1'''
     
+    #Add occurences from the thresolded image (possible values 0,1) and residue map (possible values (-1,0,1)
     summed_im1 = numpy.ndarray.flatten(thresholded_image + residue_map) #want equal to 2 for +ve1, want equal to -1 for-ve0
     summed_im0 = numpy.ndarray.flatten(thresholded_image + (-1) * residue_map) #want equal to 2 for -ve0, want equal to -1 for-ve1
     
