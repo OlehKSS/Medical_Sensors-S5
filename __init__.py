@@ -8,6 +8,9 @@ from region_growing_linear_est.quality_maps import quality_map_second_order
 from math import sqrt
 from particle_swarm_optimization.particle_initialization import phase_derivative_variance
 from particle_swarm_optimization.particle_initialization import threshold
+from particle_swarm_optimization.calculate_residues import calculate_residues
+from particle_swarm_optimization.particle_initialization import find_polarity_arrays
+
 
 #Binary Files info
 #16b unsigned int
@@ -42,14 +45,24 @@ data = phase_img.read()
 #pyplot.imshow(data, cmap = cm.Greys_r)
 #pyplot.show()
 
+#stuff for finding the phase derv map
 phasemap = phase_derivative_variance(data)
 binary = threshold(phasemap)
 
+#calculating the residues
+residue_map = calculate_residues(data)
+#fig = pyplot.figure()
+#pyplot.gray()
+#ax1 = fig.add_subplot(121)  # left side
+#ax2 = fig.add_subplot(122)  # right side
+#ax1.imshow(binary)
+#ax2.imshow(residue_map)
+#pyplot.show()
 
-fig = pyplot.figure()
-pyplot.gray()
-ax1 = fig.add_subplot(121)  # left side
-ax2 = fig.add_subplot(122)  # right side
-ax1.imshow(phasemap)
-ax2.imshow(binary)
-pyplot.show()
+#calculating the residues
+[positive_polarity_array_region1, positive_polarity_array_region0,negative_polarity_array_region1, negative_polarity_array_region0] = find_polarity_arrays(binary,residue_map)
+
+print(positive_polarity_array_region1)
+
+
+#image = io.imread('test_heart_image.jpg',as_grey = True)
