@@ -1,39 +1,54 @@
 import numpy
 from math import sqrt
+from math import pi
 
 '''Unwrap the phase using the linear regression prediction'''
 
-def linear_reg(X, point, img_data):
+#Define a linear model phi_unwr = X_unwr * B + E where
+#phi_unwr is given and X_unwr, B, and E are calculated
+#Provide the unwrapped unwrapped phase data (phi_unwr), the
+#original image data, the coordinate to unwrap (point(i,j)),
+#and the window_size. It returns the unwrapped phase prediction.
+
+#Initialize phi_unwr_data with some values not in the phi_unwr_data set (100 or something like that. Change value in line 32 if necessary)
+def linear_reg(phi_unwr_data, original_im_data, point, window_size):
     
-    #Define a linear model phi_unwr = X_unwr * B + E where
-    #phi_unwr and X_unwr are given and B and E are calculated
-    X = numpy.pad(X, [(0,0),(1,0)], mode = 'constant', constant_values = 1)
-    phi_unwr = {img_data[X[0][2]][X[0][1]], img_data[X[1][2]][X[1][1]], img_data[X[2][2]][X[2][1]]}
+    #Find X_unwr (window over original data) from the unwrapped phase data, the coordinate
+    #to unwrap and window size
+    #[rows,cols] = numpy.shape(phi_unwr)
+    low_range = int((window_size-1)/2)
+    high_range = int((window_size+1)/2)
+    
+    #Pad both arrays equal to high_range
+    phi_unwr_data = numpy.pad(phi_unwr_data, high_range, 'constant', constant_values = 100)
+    original_im_data = numpy.pad(original_im_data, high_range, 'constant', constant_values = 0)
+    
+    #Windows of original and unwrapped data size window_size x window_size
+    X_unwr = original_im_data[point[0]-low_range+high_range:point[0]+2*high_range,point[1]-low_range+high_range:point[1]+2*high_range]
+    phi_unwr_data = phi_unwr_data[point[0]-low_range+high_range:point[0]+2*high_range,point[1]-low_range+high_range:point[1]+2*high_range]
+    
+    #Create a list of indicies in phi_unwr that have been unwrapped
+    phi_unwr_data = numpy.ndarray.flatten(phi_unwr)
+    X_unwr = numpy.ndarray.flatten(X_unwr)
+    unwr_indicies = numpy.where(numpy.ndarray.flatten(phi_unwr_data) != 100)[0]
+    
+    #Get values of the wrapped and unwrapped phase, put into arrays called phi_unwr and X
+    phi_unwr = numpy.empty(1,len(unwr_indicies))
+    X = numpy.empty(1,len(unwr_indicies))
+    for i in range (0,len(unwr_indicies)):
+        phi_unwr[i] = phi_unwr_data[unwr_indicies[i]]
+        X[i] = X_unwr[unwr_indicies[i]]
                   
     #Find B, E, rank, and singular values of X
     [B, E, rank, s] = numpy.linalg.lstsq(X,phi_unwr)
                   
     #Estimate the value of phi using the least squares equation
-    point = numpy.pad(point, [(0,0),(1,0)], mode = 'constant', constant_values = 1)
-    phi_est = numpy.matmul(point,B)
+    point_val = original_im_data[point[0]+high_range][point[1]+high_range]
+    phi_est = numpy.matmul(point_val,B)
     
     #Set the value of phi according to the original image data
-    phi = img_data[point[2]][point[1]]
+    phi = original_im_data[point[0]][point[1]]
                   
-    #Calculate the unwrapped phase using ***insert forumula***
-    unwr_phase = phi + 2 * pi * int((phi_est - phi)/(2 * pi))
-    
-    return unwr_phase, B
-
-def calc_unwr_phase(point, B, img_data):
-    
-    #Estimate the value of phi using the least squares equation
-    point = numpy.pad(point, [(0,0),(1,0)], mode = 'constant', constant_values = 1)
-    phi_est = numpy.matmul(point,B)
-    
-    #Set the value of phi according to the original image data
-    phi = img_data[point[2]][point[1]]
-    
     #Calculate the unwrapped phase using ***insert forumula***
     unwr_phase = phi + 2 * pi * int((phi_est - phi)/(2 * pi))
     
