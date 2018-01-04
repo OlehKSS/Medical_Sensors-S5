@@ -2,7 +2,8 @@ import numpy
 from math import pi
 from math import sqrt
 from find_residues import calculate_residues
-from particle_initalization import phase_derivative_variance, threshold, find_polarity_arrays
+from particle_initalization import phase_derivative_variance, threshold
+from particle_operations import find_polarity_arrays
 
 def adjustment_operator (input_array,k,l):
     '''Function which deletes the element in the kth position and inserts it in the lth postion'''
@@ -14,23 +15,13 @@ def adjustment_operator (input_array,k,l):
 
 
 #Provide the original image, positive_polarity_arrays, and negative_polarity_arrays respectively
-def find_best_match_by_dPSO(image, num_particles):
-    '''Function which performs the dPSO on an image given the image, +ve and -ve residue polarity arrays for all regions and returns the best match in each region'''
+def find_best_match_by_dPSO(image, num_particles, T, c1, c2):
+    '''Function which performs the dPSO on an image given the image, number of required parameters, T (maximal iteration times), c1 (learning factor 1), c2 (learning factor 2) and returns the best match in each region'''
     [rows,cols] = numpy.shape(image)
     
     phasemap = phase_derivative_variance(image)
     thresholded_im = threshold(phasemap)
-    [S1, U1, S0, U0] = find_polarity_arrays(thresholded_image, residue_map)
-    S = [S1,S0]
-    U= [U1,U0]
-    
-    #Set values to parameters of dPSO
-    T = 1000    #maximal iteration times
-    c1 = 2      #learning factor 1
-    c2 = 2      #learning factor 2
-    
-    #Total number of regions
-    num_particles = len(S)
+    [S, U] = find_polarity_arrays(thresholded_image, residue_map, num_particles)
     
     #Calculations for region 1
     for h in range (0,num_particles):

@@ -7,7 +7,8 @@ from _shared.phase_image import PhaseImage
 from skimage import filters
 from region_growing_linear_est.quality_maps import quality_map_second_order
 from math import sqrt
-from particle_swarm_optimization.particle_initialization import phase_derivative_variance, threshold, find_polarity_arrays
+from particle_swarm_optimization.particle_initialization import phase_derivative_variance, threshold
+from particle_swarm_optimization.particle_operations import find_polarity_arrays
 from particle_swarm_optimization.find_residues import calculate_residues
 
 
@@ -54,7 +55,12 @@ binary = threshold(phasemap)
 residue_map = calculate_residues(image)
 
 #calculating the residues
-[S1, S0, U1, U0] = find_polarity_arrays(binary,residue_map)
+#[S1, S0, U1, U0] = find_polarity_arrays(binary,residue_map)
+
+#Set values to parameters of dPSO
+T = 1000    #maximal iteration times
+c1 = 2      #learning factor 1
+c2 = 2      #learning factor 2
 
 fig = pyplot.figure()
 pyplot.gray()
