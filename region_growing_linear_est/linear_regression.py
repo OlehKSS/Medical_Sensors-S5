@@ -28,7 +28,7 @@ def linear_reg(phi_unwr_data, original_im_data, point, window_size):
     phi_unwr_data = phi_unwr_data[point[0]-low_range+high_range:point[0]+2*high_range,point[1]-low_range+high_range:point[1]+2*high_range]
     
     #Create a list of indicies in phi_unwr that have been unwrapped
-    phi_unwr_data = numpy.ndarray.flatten(phi_unwr)
+    phi_unwr_data = numpy.ndarray.flatten(phi_unwr_data)
     X_unwr = numpy.ndarray.flatten(X_unwr)
     unwr_indicies = numpy.where(numpy.ndarray.flatten(phi_unwr_data) != 100)[0]
     
@@ -47,7 +47,7 @@ def linear_reg(phi_unwr_data, original_im_data, point, window_size):
     phi_est = numpy.matmul(point_val,B)
     
     #Set the value of phi according to the original image data
-    phi = original_im_data[point[0]][point[1]]
+    phi = original_im_data[point[0],point[1]]
                   
     #Calculate the unwrapped phase using ***insert forumula***
     unwr_phase = phi + 2 * pi * int((phi_est - phi)/(2 * pi))
