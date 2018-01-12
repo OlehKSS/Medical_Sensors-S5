@@ -1,4 +1,4 @@
-from tkinter import Frame, Tk, BOTH, Text, Menu, END
+from tkinter import Frame, Tk, BOTH, Text, Menu, END, Label, Entry, LEFT
 from tkinter import filedialog, messagebox
 from matplotlib import pyplot, cm
 import numpy
@@ -29,7 +29,6 @@ class S5MainWindow(Frame):
     def initUI(self):
 
         self.parent.title(S5MainWindow.title)
-        self.pack(fill=BOTH, expand=1)
 
         menubar = Menu(self.parent)
         self.parent.config(menu=menubar)
@@ -44,7 +43,20 @@ class S5MainWindow(Frame):
 
         helpmenu = Menu(menubar, tearoff = 0)
         helpmenu.add_command(label="About...", command=self.show_about)
-        menubar.add_cascade(label="Help", menu=helpmenu)    
+        menubar.add_cascade(label="Help", menu=helpmenu)
+
+        self.top_frame = Frame(self.parent)
+        self.top_frame.pack(side="top", fill="x", expand=False, padx=20, pady=20)
+
+        self.top_left = Frame(self.top_frame)
+        self.top_right = Frame(self.top_frame)
+        self.top_left.pack(side="left", fill="x", expand=True)
+        self.top_right.pack(side="right", fill="x", expand=True)
+
+        Label(self.top_left, text = "Enter Window Size:").pack()
+        self.window_size_entry = Entry(self.top_right)
+        self.window_size_entry.insert(END, '7')
+        self.window_size_entry.pack()  
 
         # self.txt = Text(self)
         # self.txt.pack(fill=BOTH, expand=1)
@@ -75,12 +87,15 @@ class S5MainWindow(Frame):
 
     def on_local_fitting_unwrap(self):
 
+        window_size = int(self.window_size_entry.get())
+        print("Entered window size is {}".format(window_size))
+
         if (self.img_wrapped is None):
             messagebox.showerror( "Error", "Open any phase image before running uwrapping.")
 
         else:
-            messagebox.showinfo( "Running", "Unwrapping started. It might take several minutes. Be patient.") 
-            self.img_unwrapped = unwrap(self.img_wrapped)
+            messagebox.showinfo( "Running", "Press OK to start unwrapping. It might take several minutes. Be patient.") 
+            self.img_unwrapped = unwrap(self.img_wrapped, window_size)
 
             if not (self.process_img_unwrapped is None):
                 #shut down the process
@@ -115,7 +130,7 @@ def main():
 
     root = Tk()
     ex = S5MainWindow(root)
-    root.geometry("300x250+300+300")
+    root.geometry("500x500+300+300")
     root.mainloop()  
 
 

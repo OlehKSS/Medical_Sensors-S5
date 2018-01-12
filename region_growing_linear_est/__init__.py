@@ -10,11 +10,12 @@ from region_growing_linear_est.linear_regression import linear_reg
 from region_growing_linear_est.quality_maps import quality_map_second_order
 from _shared.phase_image import PhaseImage
 
-def unwrap(phase_img):
+def unwrap(phase_img, window_size = 7):
     '''This function unwraps provided phase image.
 
     Args:
         phase_img (PhaseImage): n by n array of pixels that represents wrapped phase.
+        window_size (int): window size for unrapping. Default is 7
 
     Returns:
         PhaseImage: phase image with unwrapped data.   
@@ -26,10 +27,10 @@ def unwrap(phase_img):
     rows, cols = phase_img.shape
 
     #calculate quality map
-    data = phase_img.read()
+    phase_img.read()
 
     print('Calculating quality map...')
-    qm2 = quality_map_second_order(data)
+    qm2 = quality_map_second_order(phase_img.phase_data)
 
     qmap_max = qm2.max()
     qmap_min = qm2.min()
@@ -50,8 +51,8 @@ def unwrap(phase_img):
 
     #selecting initial seed
     #by reducing image size by 40% I try to omit noisy borders
-    for i in range(round(0.2*rows), round(0.8*rows)):
-        for j in range(round(0.2*cols), round(0.8*cols)):
+    for i in range(round(0.45*rows), round(0.6*rows)):
+        for j in range(round(0.45*cols), round(0.6*cols)):
             if (qm2[i, j] <= qstep) and (checked_pixels[i, j] != 1):
                 seed = (i, j)
                 #I will skip seed adding here,since I will do population with neighbors here
@@ -87,7 +88,8 @@ def unwrap(phase_img):
                 unwr_val = linear_reg(phase_img.phase_data,\
                     unwrapped_phase_img,\
                     checked_pixels,\
-                    temp_seed)
+                    temp_seed,\
+                    window_size)
 
                 checked_pixels[temp_seed[0], temp_seed[1]] = 1
                 unwrapped_phase_img[temp_seed[0], temp_seed[1]] = unwr_val
