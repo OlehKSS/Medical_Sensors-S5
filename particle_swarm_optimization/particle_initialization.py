@@ -3,6 +3,7 @@ from math import sqrt
 from scipy import signal
 from skimage import filters
 
+#Provide the image and the function outputs a phase derivative variance map
 def phase_derivative_variance(list):
     '''Function which finds the phase derivative variance for each pixel to produce a matrix NxN'''
     

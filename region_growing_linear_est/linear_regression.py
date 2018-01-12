@@ -39,13 +39,14 @@ def linear_reg(wrapped_img, unwpd_img, checked_pxls_map, point, window_size=7):
     window_low_col : window_high_col]
     
     #Create a list of indicies in phi_unwr that have been unwrapped
+
     checked_pxls_map_flat = numpy.ndarray.flatten(checked_pxls_map)
     unwr_indicies = numpy.where(checked_pxls_map_flat != 0)[0]
     unwpd_img_flat = numpy.ndarray.flatten(unwpd_img)
 
 
     #window coords [0, 1][2, 3]
-    
+
     #Get values of the wrapped and unwrapped phase, put into array called phi_unwr 
     #unwpd_pxls_coords = numpy.empty((2,len(unwr_indicies)))
     unwpd_pxls_coords = numpy.transpose(numpy.unravel_index(unwr_indicies, unwpd_img.shape))
