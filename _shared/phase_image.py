@@ -98,7 +98,7 @@ class PhaseImage:
 
         min_phase_value = self._phase_data.min()
         max_phase_value = self._phase_data.max()
-        
+
         length = self._max_pixel_value - self._min_pixel_value
         phase_length = max_phase_value - min_phase_value
 
@@ -117,8 +117,8 @@ class PhaseImage:
 
         Returns: None.
          '''
-        min_pixel_value = np.max(self._data)
-        max_pixel_value = np.min(self._data)
+        min_pixel_value = np.min(self._data)
+        max_pixel_value = np.max(self._data)
         length = max_pixel_value - min_pixel_value
         self._phase_data = (self._data - (length / 2.)) / (length / 2.) * np.pi
 

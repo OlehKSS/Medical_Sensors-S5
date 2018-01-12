@@ -4,6 +4,7 @@ This module unwraps phase images using region growing and local linear estimatio
 from collections import deque
 from math import floor
 from numpy import zeros
+from numpy import array as nparray
 #import numpy as np
 from matplotlib import pyplot as plt
 from region_growing_linear_est.linear_regression import linear_reg
