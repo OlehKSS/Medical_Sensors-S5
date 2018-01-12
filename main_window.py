@@ -5,7 +5,7 @@ import numpy
 from multiprocessing import Process
 
 from _shared.phase_image import PhaseImage
-from region_growing_linear_est import unwrap
+from unroll import unwrap
 
 
 
@@ -35,7 +35,7 @@ class S5MainWindow(Frame):
 
         filemenu = Menu(menubar, tearoff = 0)
         filemenu.add_command(label="Open", command=self.onOpen)
-        filemenu.add_command(label="Unwrap with local fitting plane",\
+        filemenu.add_command(label="Unwrap using UNROLL method",\
         command=self.on_local_fitting_unwrap)
         #filemenu.add_command(label="Unwrap with swarn oprimization", command=self.hello)
         filemenu.add_command(label="Save unwrapped phase data", command=self.on_save_phase_data)
