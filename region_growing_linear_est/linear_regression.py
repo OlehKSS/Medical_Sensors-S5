@@ -27,7 +27,7 @@ def linear_reg(checked_binary_im, unwr_im, wr_im, point, window_size):
     checked_binary_im = numpy.ndarray.flatten(checked_binary_im)
     X_unwr = numpy.ndarray.flatten(X_unwr)
     unwr_im = numpy.ndarray.flatten(unwr_im)
-    unwr_indicies = numpy.where(numpy.ndarray.flatten(checked_binary_im) != 0)[0]
+    unwr_indicies = numpy.where(checked_binary_im != 0)[0]
     
     #Get values of the wrapped and unwrapped phase, put into arrays called phi_unwr and X
     X = numpy.empty((1,len(unwr_indicies)))
